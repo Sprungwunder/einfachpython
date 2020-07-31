@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import pytest
+
 from einfachpython.skeleton import fib
 
 __author__ = "Christian Scholz"
