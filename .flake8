@@ -9,5 +9,5 @@ exclude =
     **/.eggs,
     **/.env*
 
-max-line-length = 100
+max-line-length = 80
 extend-ignore = E203
