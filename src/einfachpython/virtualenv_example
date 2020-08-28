@@ -1,0 +1,142 @@
+Erstellen von virtuellen Umgebungen mit Python
+##############################################
+
+Das erstellen einer virtuellen Umgebung mit Python
+**************************************************
+
+Ubuntu 16.04 hat sowohl Python2.7 als auch Python3 Versionen installiert, mit
+denen eine virtuelle Umgebung erstellt werden kann.
+
+.. code-block:: shell
+
+    christian@ubuntu:~$ python3 -m pip install --user virtualenv
+
+    christian@ubuntu:~$ virtualenv venv2.7 -p python2.7
+    Running virtualenv with interpreter /usr/bin/python2.7
+    Already using interpreter /usr/bin/python2.7
+    New python executable in /home/christian/venv2.7/bin/python2.7
+    Also creating executable in /home/christian/venv2.7/bin/python
+    Installing setuptools, pip, wheel...
+    done.
+
+    christian@ubuntu:~$ virtualenv venv
+    Using base prefix '/usr'
+    New python executable in /home/christian/venv/bin/python3.6
+    Also creating executable in /home/christian/venv/bin/python
+    Installing setuptools, pip, wheel...
+    done.
+
+    christian@ubuntu:~$ python3.8 -m venv my_venv
+
+Aktivieren einer virtuellen Umgebung über 'source' oder '.'
+***********************************************************
+
+.. code-block:: shell
+
+    christian@ubuntu:~$ source venv2.7/bin/activate
+    (venv2.7) christian@ubuntu:~$ python
+    Python 2.7.17 (default, Jul 20 2020, 15:37:01)
+    [GCC 7.5.0] on linux2
+    Type "help", "copyright", "credits" or "license" for more information.
+    >>>
+    (venv2.7) christian@ubuntu:~$ deactivate
+    christian@ubuntu:~$
+
+    christian@ubuntu:~$ . venv/bin/activate
+    (venv) christian@ubuntu:~$ python
+    Python 3.6.9 (default, Jul 17 2020, 12:50:27)
+    [GCC 8.4.0] on linux
+    Type "help", "copyright", "credits" or "license" for more information.
+    >>>
+
+Python Packages und Libraries mit pip in einer virtuellen Umgebung installieren
+*******************************************************************************
+.. code-block:: shell
+
+    christian@ubuntu:~$ . venv2.7/bin/activate
+    (venv2.7) christian@ubuntu:~$ pip install PyYAML
+    DEPRECATION: Python 2.7 reached the end of its life on January 1st, ...
+    Processing ./.cache/pip/wheels/d1/d5/a0/3c27cdc8b0209c5fc1385afeee936cf8a71e13d885388b4be2/PyYAML-5.3.1-cp27-cp27mu-linux_x86_64.whl
+    Installing collected packages: PyYAML
+    Successfully installed PyYAML-5.3.1
+
+    (venv2.7) christian@ubuntu:~$ pip freeze
+    DEPRECATION: Python 2.7 reached the end of its life on January 1st, ...
+    PyYAML==5.3.1
+
+    (venv) christian@ubuntu:~$ pip install PyYAML
+    Collecting PyYAML
+      Using cached PyYAML-5.3.1.tar.gz (269 kB)
+    Building wheels for collected packages: PyYAML
+      Building wheel for PyYAML (setup.py) ... done
+      Created wheel for PyYAML: filename=PyYAML-5.3.1-cp36-cp36m-linux_x86_64.whl size=44619 sha256=0f1ed03590c156a3a40a55fd371aeb033da6e9ed24e68240133f1f704dfdd2a3
+      Stored in directory: /home/christian/.cache/pip/wheels/e5/9d/ad/2ee53cf262cba1ffd8afe1487eef788ea3f260b7e6232a80fc
+    Successfully built PyYAML
+    Installing collected packages: PyYAML
+    Successfully installed PyYAML-5.3.1
+
+    (venv) christian@ubuntu:~$ pip freeze
+    PyYAML==5.3.1
+
+Beispiel von virtuellen Umgebungen in unterschiedlichen Projekten
+*****************************************************************
+
+.. code-block:: shell
+    christian@ubuntu:~$ mkdir ProjectA
+    christian@ubuntu:~$ cd ProjectA/
+    christian@ubuntu:~/ProjectA$ python3.8 -m venv venv_A
+    christian@ubuntu:~/ProjectA$ . venv_A/bin/activate
+    (venv_A) christian@ubuntu:~/ProjectA$ pip install PyYAML==5.1
+    Successfully installed PyYAML-5.1
+    (venv_A) christian@ubuntu:~/ProjectA$ pip freeze
+    PyYAML==5.1
+    (venv_A) christian@ubuntu:~/ProjectA$ deactivate
+    christian@ubuntu:~/ProjectA$ cd ..
+
+    christian@ubuntu:~$ mkdir ProjectB
+    christian@ubuntu:~$ cd ProjectB
+    christian@ubuntu:~/ProjectB$ python3.8 -m venv venv_B
+    christian@ubuntu:~/ProjectB$ . venv_B/bin/activate
+    (venv_B) christian@ubuntu:~/ProjectB$ pip install PyYAML
+    Successfully installed PyYAML-5.3.1
+    (venv_B) christian@ubuntu:~/ProjectB$ pip freeze
+    PyYAML==5.3.1
+    (venv_B) christian@ubuntu:~/ProjectB$
+    (venv_B) christian@ubuntu:~/ProjectB$ deactivate
+    christian@ubuntu:~/ProjectB$ cd ..
+    christian@ubuntu:~$ . ProjectA/venv_A/bin/activate
+    (venv_A) christian@ubuntu:~$ pip freeze
+    PyYAML==5.1
+
+Installieren von vordefinierten Packages mit pip aus einer requirement.txt
+**************************************************************************
+Mit einer requirements.txt Datei können Pakete definiert werden, die in die
+virtuelle Umgebung installiert werden sollen.
+
+.. code-block:: shell
+
+    christian@ubuntu:~$ . ProjectA/venv_A/bin/activate
+    (venv_A) christian@ubuntu:~$ cat ProjectA/requirements.txt
+    PyYAML==5.1
+    (venv_A) christian@ubuntu:~$ pip install -r ProjectA/requirements.txt
+    Successfully installed PyYAML-5.1
+    (venv_A) christian@ubuntu:~$ pip freeze
+    PyYAML==5.1
+    (venv_A) christian@ubuntu:~$ deactivate
+
+    christian@ubuntu:~$ . ProjectB/venv_B/bin/activate
+    (venv_B) christian@ubuntu:~$ cat ProjectB/requirements.txt
+    PyYAML
+    (venv_B) christian@ubuntu:~$ pip install -r ProjectB/requirements.txt
+    Successfully installed PyYAML-5.3.1
+    (venv_B) christian@ubuntu:~$ pip freeze
+    PyYAML==5.3.1
+
+
+Löschen einer virtuellen Umgebung
+*********************************
+Es kann einfach das Verzeichnis der virtuellen Umgebung gelöscht werden:
+
+.. code-block:: shell
+
+    christian@ubuntu:~$ rm -rf venv2.7/
